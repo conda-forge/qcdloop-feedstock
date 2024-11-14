@@ -1,4 +1,4 @@
-From ff243a846b5172b1104b35ef5638c154dc137bb4 Mon Sep 17 00:00:00 2001
+From 59270b7e93bb2aa71a6d8960c56578b63e1d012c Mon Sep 17 00:00:00 2001
 From: Matthew Feickert <matthew.feickert@cern.ch>
 Date: Thu, 14 Nov 2024 11:05:46 -0700
 Subject: [PATCH] fix: Allow for environment override of CMAKE_CXX_FLAGS
@@ -8,14 +8,14 @@ Subject: [PATCH] fix: Allow for environment override of CMAKE_CXX_FLAGS
   the value of CXXFLAGS if it exists in the environment.
    - c.f. https://cmake.org/cmake/help/v3.31/envvar/CXXFLAGS.html
 ---
- CMakeLists.txt | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ CMakeLists.txt | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 412b98c..d179e77 100644
+index 412b98c..420a731 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -20,7 +20,11 @@ set(CMAKE_CXX_STANDARD 11)
+@@ -20,7 +20,14 @@ set(CMAKE_CXX_STANDARD 11)
  set(CMAKE_CXX_STANDARD_REQUIRED ON)
  set(CMAKE_CXX_EXTENSIONS OFF)
  set(VERSION "\"2.0.9\"")
@@ -23,6 +23,9 @@ index 412b98c..d179e77 100644
 +# Set default CXXFLAGS but allow for environment override
 +if (NOT CMAKE_CXX_FLAGS)
 +  set(CMAKE_CXX_FLAGS "-Wall -Wextra -march=nocona -mtune=haswell -fvisibility-inlines-hidden -fmessage-length=0 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -fext-numeric-literals")
++else()
++  # Ensure -fext-numeric-literals is always set
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fext-numeric-literals" CACHE STRING "Update environment CXXFLAGS" FORCE)
 +endif()
 +message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fPIC ${CMAKE_CXX_FLAGS}" CACHE STRING "debug compile flags" FORCE)
