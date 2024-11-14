@@ -22,6 +22,10 @@ build:
   run_exports:
     - {{ pin_subpackage('qcdloop', max_pin='x.x') }}
   script:
+    # DEBUG
+    - echo "# Looking for quadmath.h"
+    - find $PREFIX -type f -iname "quadmath.h"
+    - echo "quadmath.h $(find $PREFIX -type f -iname "quadmath.h")"
     # FIXME: Remove unknown argument: '-fext-numeric-literals' CMAKE_CXX_FLAGS for macOS builds
     # Note that conda-forge sed is gsed even on macOS
     - sed -i 's/ -fext-numeric-literals//g' source/CMakeLists.txt  # [osx]
