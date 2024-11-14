@@ -1,4 +1,4 @@
-From 59270b7e93bb2aa71a6d8960c56578b63e1d012c Mon Sep 17 00:00:00 2001
+From 279227e870ac4ba3f60f5b38790e01c1e591a81c Mon Sep 17 00:00:00 2001
 From: Matthew Feickert <matthew.feickert@cern.ch>
 Date: Thu, 14 Nov 2024 11:05:46 -0700
 Subject: [PATCH] fix: Allow for environment override of CMAKE_CXX_FLAGS
