@@ -1,5 +1,5 @@
 {% set name = "qcdloop" %}
-{% set version = "2.0.9" %}
+{% set version = "2.0.11" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/scarrazza/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 6ffbd371658726054b903dce9a7855ac02b258eac59e2ee13524dda9e278f23b
+  sha256: a6274a4f552209c5e8c41d265af52214ac72a235a25d3b771f969deb2f15788a
   folder: source
   patches:
     # Avoid egrep warning breaking qcdloop-config
@@ -20,7 +20,7 @@ source:
 build:
   # FIXME: clang does not yet support quadmath, so macOS builds are broken
   skip: true  # [not linux]
-  number: 4
+  number: 0
   run_exports:
     - {{ pin_subpackage('qcdloop', max_pin='x.x') }}
   script:
