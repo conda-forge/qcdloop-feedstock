@@ -24,6 +24,7 @@ build:
     - cmake -LH build
     - cmake --build build --clean-first --parallel="${CPU_COUNT}"
     - cmake --install build
+    - rm -rf build
 
 requirements:
   build:
@@ -38,7 +39,12 @@ requirements:
 
 test:
   source_files:
-    - build
+    - source/
+  requires:
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - cmake
+    - make
   commands:
     - test -f $PREFIX/bin/qcdloop-config
     - test -f $PREFIX/lib/pkgconfig/qcdloop.pc
@@ -67,10 +73,14 @@ test:
     - qcdloop-config --ldflags
     - qcdloop-config --version
 
+    - cmake -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_EXAMPLES=ON -S source -B build
+    - cmake --build build --clean-first --parallel="${CPU_COUNT}"
     - cd build
     - ./cache_test  # [build_platform == target_platform]
     - ./cmass_test  # [build_platform == target_platform]
     - ./trigger_test  # [build_platform == target_platform]
+
+    - rm -rf build
 
 about:
   home: https://github.com/scarrazza/qcdloop
