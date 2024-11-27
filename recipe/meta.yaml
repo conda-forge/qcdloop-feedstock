@@ -9,13 +9,6 @@ source:
   url: https://github.com/scarrazza/{{ name }}/archive/{{ version }}.tar.gz
   sha256: a6274a4f552209c5e8c41d265af52214ac72a235a25d3b771f969deb2f15788a
   folder: source
-  patches:
-    # Avoid egrep warning breaking qcdloop-config
-    - 0001-fix-Use-grep-E-over-egrep.patch
-    # Allow setting CMAKE_CXX_FLAGS from CXXFLAGS
-    - 0002-environment-override-of-CMAKE_CXX_FLAGS.patch
-    # Give cmake_minimum_required a range of supported CMakes
-    - 0003-support-range-of-cmakes.patch
 
 build:
   # FIXME: clang does not yet support quadmath, so macOS builds are broken
