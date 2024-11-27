@@ -24,7 +24,6 @@ build:
     - cmake -LH build
     - cmake --build build --clean-first --parallel="${CPU_COUNT}"
     - cmake --install build
-    - rm -rf build
 
 requirements:
   build:
@@ -79,8 +78,6 @@ test:
     - ./cache_test  # [build_platform == target_platform]
     - ./cmass_test  # [build_platform == target_platform]
     - ./trigger_test  # [build_platform == target_platform]
-
-    - rm -rf build
 
 about:
   home: https://github.com/scarrazza/qcdloop
