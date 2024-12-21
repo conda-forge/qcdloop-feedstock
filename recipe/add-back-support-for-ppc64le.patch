@@ -1,4 +1,4 @@
-From c9ed117e7df93aa636eb34ecf25ac2fb65672149 Mon Sep 17 00:00:00 2001
+From 6e3aac07eb9eb1039e6239284f503a88597219b9 Mon Sep 17 00:00:00 2001
 From: Matthew Feickert <matthew.feickert@cern.ch>
 Date: Fri, 20 Dec 2024 23:37:54 -0700
 Subject: [PATCH] fix: Add back support for ppc64le
@@ -31,7 +31,7 @@ index 849d137..5894c76 100644
  find_library(QUADMATH_LIBRARY
    NAMES ${QUADMATH_NAMES}
 diff --git a/src/cache.cc b/src/cache.cc
-index 57a80d6..ea0df22 100644
+index 57a80d6..3041681 100644
 --- a/src/cache.cc
 +++ b/src/cache.cc
 @@ -17,7 +17,7 @@ namespace std {
@@ -39,12 +39,12 @@ index 57a80d6..ea0df22 100644
    }
  
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    template <>
    struct hash<ql::qdouble> : public __hash_base<size_t, ql::qdouble>
    {
 diff --git a/src/qcdloop/maths.h b/src/qcdloop/maths.h
-index b52ccf6..f3fa654 100644
+index b52ccf6..5f9a56d 100644
 --- a/src/qcdloop/maths.h
 +++ b/src/qcdloop/maths.h
 @@ -21,7 +21,7 @@ namespace ql
@@ -52,7 +52,7 @@ index b52ccf6..f3fa654 100644
    // Logarithms
    inline double   Log(double const& x)   { return std::log(x); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qdouble  Log(qdouble const& x)  { return logq(x); }
    inline qcomplex Log(qcomplex const& x) { return clogq(x); }
  #endif
@@ -61,7 +61,7 @@ index b52ccf6..f3fa654 100644
    // Power
    inline double   Pow(double const& x, int const& a)   { return std::pow(x, a); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qdouble  Pow(qdouble const& x, int const& a)  { return powq(x,a); }
    inline qcomplex Pow(qcomplex const& x, int const& a){ return cpowq(x,a); }
  #endif
@@ -70,7 +70,7 @@ index b52ccf6..f3fa654 100644
    // Root
    inline double   Sqrt(double const& x)  { return std::sqrt(x); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qdouble  Sqrt(qdouble const& x) { return sqrtq(x); }
    inline qcomplex Sqrt(qcomplex const& x){ return csqrtq(x); }
  #endif
@@ -79,7 +79,7 @@ index b52ccf6..f3fa654 100644
    // Absolute value
    inline double  Abs(double const& x)   { return std::abs(x); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qdouble Abs(qdouble const& x)  { return fabsq(x);}
    inline qdouble Abs(qcomplex const& x) { return cabsq(x); }
  #endif
@@ -88,7 +88,7 @@ index b52ccf6..f3fa654 100644
    inline qdouble Imag(qdouble const& x) { UNUSED(x); return qdouble(0); }
    inline double  Imag(complex const& x) { return x.imag(); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qdouble Imag(qcomplex const& x){ return cimagq(x);}
  #endif
  #if defined(__aarch64__)
@@ -97,7 +97,7 @@ index b52ccf6..f3fa654 100644
    inline qdouble Real(qdouble const& x) { return x; }
    inline double  Real(complex const& x) { return x.real(); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qdouble Real(qcomplex const& x) { return crealq(x); }
  #endif
  #if defined(__aarch64__)
@@ -106,12 +106,12 @@ index b52ccf6..f3fa654 100644
  
    inline complex  Conjg(complex const& x) { return std::conj(x); }
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    inline qcomplex Conjg(qcomplex const& x){ return conjq(x); }
  #endif
  #if defined(__aarch64__)
 diff --git a/src/qcdloop/types.h b/src/qcdloop/types.h
-index 0294bcd..652ce87 100644
+index 0294bcd..63be78a 100644
 --- a/src/qcdloop/types.h
 +++ b/src/qcdloop/types.h
 @@ -7,7 +7,7 @@
@@ -119,7 +119,7 @@ index 0294bcd..652ce87 100644
  #pragma once
  
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
  extern "C" { // for gcc4.7 compatibility
  #include <quadmath.h>
  }
@@ -128,12 +128,12 @@ index 0294bcd..652ce87 100644
  {
  
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    //! implementation of operator<< for qdouble
    ostream& operator<<(std::ostream& out, ql::qdouble f);
  #endif
 diff --git a/src/tools.cc b/src/tools.cc
-index bb24b76..ee450d6 100644
+index bb24b76..7587d8d 100644
 --- a/src/tools.cc
 +++ b/src/tools.cc
 @@ -20,7 +20,7 @@ namespace ql {
@@ -141,12 +141,12 @@ index bb24b76..ee450d6 100644
    Tools<TOutput,TMass,TScale>::Tools():
      _qlonshellcutoff(is_same<TScale,double>::value ? 1e-10 : 1e-20q),
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
      _pi(is_same<TScale,double>::value ? M_PI : M_PIq),
  #endif
  #if defined(__aarch64__)
 diff --git a/src/types.cc b/src/types.cc
-index 19ac110..e8ad112 100644
+index 19ac110..6bfb298 100644
 --- a/src/types.cc
 +++ b/src/types.cc
 @@ -9,7 +9,7 @@
@@ -154,7 +154,7 @@ index 19ac110..e8ad112 100644
  namespace std
  {
 -#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__ppc64__)
++#if defined(__x86_64__) || defined(__i386__) || defined(__PPC64__) || defined(__ppc64__) || defined(_ARCH_PPC64)
    ostream& operator<<(std::ostream& out, ql::qdouble f)
    {
       char buf[200];

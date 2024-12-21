@@ -10,6 +10,8 @@ source:
   sha256: 75ac2d00231714210859d39c4beebce14f183707afe47f4550f33ef9f348b3c1
   folder: source
   patches:
+    # Remove in releases after v2.1.0
+    # c.f. https://github.com/scarrazza/qcdloop/pull/35
     - add-back-support-for-ppc64le.patch
 
 build:
